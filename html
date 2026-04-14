@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD-Tech | פתרונות איטום ואינסטלציה מתקדמים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0d1117;
+    --steel:     #1c2433;
+    --panel:     #1e2a3a;
+    --accent:    #0ea5e9;
+    --accent2:   #f97316;
+    --light:     #f0f6ff;
+    --muted:     #8ca0b8;
+    --white:     #ffffff;
+    --radius:    10px;
+    --transition: 0.3s ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Assistant', sans-serif;
+    background: var(--ink);
+    color: var(--light);
+    font-size: 17px;
+    line-height: 1.7;
+    direction: rtl;
+  }
+
+  /* ─── STICKY BAR ─── */
+  .sticky-bar {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: var(--accent2);
+    padding: 9px 20px;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 15px;
+    box-shadow: 0 2px 12px rgba(249,115,22,.4);
+  }
+  .sticky-bar a { color: #fff; text-decoration: none; letter-spacing: .3px; }
+  .sticky-bar .pulse {
+    width: 10px; height: 10px; border-radius: 50%; background: #fff;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.4)}
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 38px; z-index: 999;
+    background: rgba(13,17,23,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(14,165,233,.15);
+    padding: 14px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 22px;
+    color: var(--accent); letter-spacing: -1px;
+  }
+  .nav-logo span { color: var(--accent2); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600;
+    transition: color var(--transition);
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--accent); color: #fff; border: none; border-radius: 6px;
+    padding: 9px 20px; font-weight: 700; font-size: 14px; cursor: pointer;
+    font-family: 'Heebo', sans-serif; text-decoration: none;
+    transition: background var(--transition);
+  }
+  .nav-cta:hover { background: #0284c7; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 92vh;
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(14,165,233,.13) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(249,115,22,.08) 0%, transparent 60%),
+      var(--ink);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 60px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg, transparent, transparent 59px,
+      rgba(14,165,233,.04) 60px
+    ),
+    repeating-linear-gradient(
+      90deg, transparent, transparent 59px,
+      rgba(14,165,233,.04) 60px
+    );
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(14,165,233,.12); border: 1px solid rgba(14,165,233,.3);
+    border-radius: 40px; padding: 6px 18px;
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    margin-bottom: 24px; width: fit-content;
+  }
+  .hero h1 {
+    font-family: 'Heebo', sans-serif;
+    font-size: clamp(32px, 5vw, 62px);
+    font-weight: 900; line-height: 1.15;
+    max-width: 760px; margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p {
+    font-size: 18px; color: var(--muted); max-width: 560px; margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff; text-decoration: none;
+    padding: 15px 32px; border-radius: 8px;
+    font-family: 'Heebo', sans-serif; font-weight: 800; font-size: 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 0 30px rgba(14,165,233,.3);
+    transition: all var(--transition);
+  }
+  .btn-primary:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(14,165,233,.4); }
+  .btn-wa {
+    background: #25d366; color: #fff; text-decoration: none;
+    padding: 15px 32px; border-radius: 8px;
+    font-family: 'Heebo', sans-serif; font-weight: 800; font-size: 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all var(--transition);
+  }
+  .btn-wa:hover { background: #1bb856; transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid rgba(140,160,184,.3); color: var(--muted); text-decoration: none;
+    padding: 15px 28px; border-radius: 8px;
+    font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 15px;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all var(--transition);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-trust {
+    margin-top: 50px;
+    display: flex; gap: 40px; flex-wrap: wrap;
+  }
+  .trust-item { display: flex; align-items: center; gap: 10px; }
+  .trust-icon { font-size: 22px; }
+  .trust-text strong { display: block; font-size: 20px; font-weight: 900; color: var(--white); font-family: 'Heebo', sans-serif; }
+  .trust-text span { font-size: 12px; color: var(--muted); }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 90px 60px; }
+  .section-label {
+    display: inline-block; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px; color: var(--accent);
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Heebo', sans-serif; font-weight: 900;
+    font-size: clamp(26px, 3.5vw, 42px); color: var(--white); line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  h2 em { font-style: normal; color: var(--accent); }
+  .section-sub { color: var(--muted); font-size: 17px; max-width: 540px; margin-bottom: 56px; }
+  .section-header { margin-bottom: 56px; }
+
+  /* ─── WHY US (stats row) ─── */
+  .why-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;
+  }
+  .why-card {
+    background: var(--panel);
+    border: 1px solid rgba(14,165,233,.12);
+    border-radius: var(--radius);
+    padding: 30px 24px;
+    transition: all var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .why-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(14,165,233,.06) 0%, transparent 60%);
+    opacity: 0; transition: opacity var(--transition);
+  }
+  .why-card:hover { border-color: rgba(14,165,233,.3); transform: translateY(-4px); }
+  .why-card:hover::before { opacity: 1; }
+  .why-icon { font-size: 30px; margin-bottom: 14px; }
+  .why-card h3 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .why-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── SERVICES ─── */
+  .services-bg { background: var(--steel); }
+  .service-groups { display: flex; flex-direction: column; gap: 50px; }
+  .service-group-label {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+  }
+  .service-group-label .group-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .group-diagnose .group-icon { background: rgba(14,165,233,.15); }
+  .group-treat .group-icon  { background: rgba(249,115,22,.15); }
+  .group-rehab .group-icon  { background: rgba(34,197,94,.15); }
+  .service-group-label h3 {
+    font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 20px;
+  }
+  .service-group-label span { color: var(--muted); font-size: 14px; }
+  .service-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .service-card {
+    background: var(--ink);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: var(--radius); padding: 24px 20px;
+    transition: all var(--transition);
+  }
+  .service-card:hover { border-color: rgba(14,165,233,.25); transform: translateY(-3px); }
+  .service-card .s-icon { font-size: 28px; margin-bottom: 12px; }
+  .service-card h4 { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .service-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ─── HOW IT WORKS ─── */
+  .steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .steps::before {
+    content: ''; position: absolute;
+    right: 23px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .step {
+    display: flex; gap: 28px; align-items: flex-start;
+    padding: 0 0 40px 0; position: relative;
+  }
+  .step-num {
+    flex-shrink: 0; width: 48px; height: 48px;
+    background: var(--panel); border: 2px solid var(--accent);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 18px; color: var(--accent);
+    position: relative; z-index: 1;
+  }
+  .step-content h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; padding-top: 10px; }
+  .step-content p { font-size: 15px; color: var(--muted); }
+  .step-content .step-time {
+    display: inline-block; margin-top: 8px;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    background: rgba(14,165,233,.1); border-radius: 4px; padding: 3px 10px;
+  }
+
+  /* ─── COMPARISON ─── */
+  .compare-bg { background: var(--steel); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 860px; }
+  .compare-col {
+    border-radius: var(--radius); padding: 32px 28px;
+  }
+  .compare-col.good {
+    background: rgba(14,165,233,.08); border: 1px solid rgba(14,165,233,.25);
+  }
+  .compare-col.bad {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+  }
+  .compare-col h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; font-family: 'Heebo', sans-serif; }
+  .compare-col.good h3 { color: var(--accent); }
+  .compare-col.bad h3  { color: var(--muted); }
+  .compare-item { display: flex; gap: 12px; margin-bottom: 14px; font-size: 15px; }
+  .compare-item .ci { flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .testi-card {
+    background: var(--panel); border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius); padding: 28px 24px;
+    position: relative;
+  }
+  .testi-card::before {
+    content: '"'; position: absolute; top: 14px; left: 20px;
+    font-size: 60px; color: var(--accent); opacity: .15;
+    font-family: 'Heebo', sans-serif; font-weight: 900; line-height: 1;
+  }
+  .stars { color: #f59e0b; font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .testi-text { font-size: 15px; color: #c8d8ec; line-height: 1.7; margin-bottom: 18px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(14,165,233,.2); display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: var(--accent);
+    font-family: 'Heebo', sans-serif;
+  }
+  .testi-name { font-weight: 700; font-size: 15px; color: var(--white); }
+  .testi-location { font-size: 12px; color: var(--muted); }
+  .testi-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ─── EMERGENCY CTA ─── */
+  .emergency-cta {
+    background:
+      radial-gradient(ellipse 70% 80% at 50% 50%, rgba(249,115,22,.15) 0%, transparent 70%),
+      var(--ink);
+    border-top: 1px solid rgba(249,115,22,.2);
+    border-bottom: 1px solid rgba(249,115,22,.2);
+    text-align: center; padding: 80px 40px;
+  }
+  .emergency-cta h2 { margin-bottom: 10px; }
+  .emergency-cta h2 em { color: var(--accent2); }
+  .emergency-cta p { color: var(--muted); margin-bottom: 36px; }
+  .emergency-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+  /* ─── GALLERY ─── */
+  .gallery-bg { background: var(--steel); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .gallery-item {
+    aspect-ratio: 4/3;
+    border-radius: var(--radius); overflow: hidden;
+    background: var(--panel);
+    border: 1px solid rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; cursor: pointer;
+    transition: transform var(--transition);
+  }
+  .gallery-item:hover { transform: scale(1.02); }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-item .gallery-placeholder {
+    color: var(--muted); font-size: 13px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .gallery-item .gallery-placeholder span { font-size: 28px; }
+
+  /* ─── FAQ ─── */
+  .faq-list { max-width: 720px; }
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%; background: none; border: none; cursor: pointer;
+    text-align: right; padding: 22px 0;
+    font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 16px;
+    color: var(--white); display: flex; justify-content: space-between;
+    align-items: center; gap: 16px;
+    transition: color var(--transition);
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-arrow {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(14,165,233,.1); border: 1px solid rgba(14,165,233,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--accent); transition: transform var(--transition);
+  }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .3s ease; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding: 0 0 22px; font-size: 15px; color: var(--muted); line-height: 1.75; }
+
+  /* ─── CONTACT FORM ─── */
+  .contact-bg { background: var(--steel); }
+  .contact-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: start; }
+  .contact-info h2 { margin-bottom: 16px; }
+  .contact-info p { color: var(--muted); font-size: 16px; margin-bottom: 32px; }
+  .contact-channels { display: flex; flex-direction: column; gap: 14px; }
+  .contact-channel {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--ink); border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px; padding: 16px 18px; text-decoration: none;
+    transition: all var(--transition); color: var(--light);
+  }
+  .contact-channel:hover { border-color: var(--accent); }
+  .cc-icon {
+    width: 42px; height: 42px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .cc-phone .cc-icon  { background: rgba(14,165,233,.15); }
+  .cc-wa .cc-icon     { background: rgba(37,211,102,.15); }
+  .cc-label { font-size: 12px; color: var(--muted); }
+  .cc-value { font-weight: 700; font-size: 16px; color: var(--white); }
+
+  /* form */
+  .contact-form {
+    background: var(--ink); border: 1px solid rgba(14,165,233,.12);
+    border-radius: 14px; padding: 36px 32px;
+  }
+  .form-title { font-family: 'Heebo', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); margin-bottom: 24px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; background: var(--panel);
+    border: 1px solid rgba(255,255,255,.08); border-radius: 8px;
+    padding: 12px 16px; color: var(--white); font-family: 'Assistant', sans-serif;
+    font-size: 15px; outline: none; transition: border-color var(--transition);
+    direction: rtl;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group select { cursor: pointer; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-emergency {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(249,115,22,.07); border: 1px solid rgba(249,115,22,.2);
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; cursor: pointer;
+  }
+  .form-emergency input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent2); cursor: pointer; }
+  .form-emergency label { font-size: 14px; font-weight: 600; color: #fed7aa; cursor: pointer; }
+  .form-submit {
+    width: 100%; background: var(--accent); color: #fff; border: none;
+    border-radius: 8px; padding: 16px; font-family: 'Heebo', sans-serif;
+    font-weight: 800; font-size: 17px; cursor: pointer;
+    transition: all var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .form-submit:hover { background: #0284c7; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,.3); }
+  .form-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 40px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo { font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 20px; color: var(--accent); }
+  .footer-logo span { color: var(--accent2); }
+  .footer-text { font-size: 13px; color: var(--muted); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color var(--transition); }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    section { padding: 70px 24px; }
+    .hero { padding: 80px 24px 50px; }
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .contact-layout { grid-template-columns: 1fr; gap: 36px; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 30px 24px; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* WA float btn */
+  .float-wa {
+    position: fixed; bottom: 28px; left: 28px; z-index: 900;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25d366; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,.5);
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-6px)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ░░ STICKY BAR ░░ -->
+<div class="sticky-bar">
+  <div class="pulse"></div>
+  <span>🚨 שירות חירום 24/7 — מענה תוך שעתיים באזור המרכז</span>
+  <a href="tel:050-444-4878">📞 050-444-4878</a>
+</div>
+
+<!-- ░░ NAVBAR ░░ -->
+<nav>
+  <div class="nav-logo">MD<span>.</span>Tech</div>
+  <ul class="nav-links">
+    <li><a href="#services">שירותים</a></li>
+    <li><a href="#how">איך זה עובד</a></li>
+    <li><a href="#tech">הטכנולוגיה</a></li>
+    <li><a href="#testimonials">לקוחות</a></li>
+    <li><a href="#faq">שאלות נפוצות</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">קבל הצעת מחיר</a>
+</nav>
+
+<!-- ░░ HERO ░░ -->
+<section class="hero">
+  <div class="hero-badge">✅ מעל 15 שנות ניסיון · NO DIG · אחריות מלאה</div>
+  <h1>פותרים בעיות ביוב ואינסטלציה — <em>בלי הרס, בלי הפתעות</em></h1>
+  <p>אבחון מדויק עם מצלמות תרמיות, תיקון מבפנים ללא חפירות, ושקט נפשי מלא. שירות חירום תוך שעתיים.</p>
+  <div class="hero-actions">
+    <a href="tel:050-444-4878" class="btn-primary">📞 התקשר עכשיו</a>
+    <a href="https://api.whatsapp.com/send?phone=972504444878" class="btn-wa">💬 וואטסאפ מהיר</a>
+    <a href="#contact" class="btn-ghost">קבל הצעת מחיר ←</a>
+  </div>
+  <div class="hero-trust">
+    <div class="trust-item">
+      <div class="trust-icon">🏅</div>
+      <div class="trust-text"><strong>15+</strong><span>שנות ניסיון</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">⚡</div>
+      <div class="trust-text"><strong>שעתיים</strong><span>זמן תגובה</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🔒</div>
+      <div class="trust-text"><strong>אחריות</strong><span>על כל עבודה</span></div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🚫⛏️</div>
+      <div class="trust-text"><strong>ללא הרס</strong><span>פותרים מבפנים</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ WHY US ░░ -->
+<section id="about">
+  <div class="section-header fade-in">
+    <div class="section-label">למה MD-Tech</div>
+    <h2>הטכנולוגיה המתקדמת ביותר — <em>בשירות השקט שלך</em></h2>
+    <p class="section-sub">כל פרויקט מתחיל באבחון מדויק וממשיך לביצוע מוקפד, נקי וללא פגיעה מיותרת במבנה.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card fade-in">
+      <div class="why-icon">🔬</div>
+      <h3>אבחון לפני כל דבר</h3>
+      <p>מצלמות תרמיות וסיב אופטי — רואים בדיוק מה קורה לפני שנוגעים בכלום.</p>
+    </div>
+    <div class="why-card fade-in">
+      <div class="why-icon">🚫⛏️</div>
+      <h3>אפס הרס</h3>
+      <p>טכנולוגיית NO DIG — מתקנים מבפנים ללא חפירות, שבירת ריצוף או פגיעה בקירות.</p>
+    </div>
+    <div class="why-card fade-in">
+      <div class="why-icon">⚡</div>
+      <h3>חירום תוך שעתיים</h3>
+      <p>זמינים 24/7 כולל שבתות וחגים. מגיעים תוך שעתיים באזור המרכז.</p>
+    </div>
+    <div class="why-card fade-in">
+      <div class="why-icon">🔒</div>
+      <h3>אחריות מלאה</h3>
+      <p>אם אותה בעיה חוזרת — אנחנו חוזרים חינם. ללא תירוצים, ללא דיונים.</p>
+    </div>
+    <div class="why-card fade-in">
+      <div class="why-icon">💰</div>
+      <h3>שקיפות מחירים</h3>
+      <p>הצעת מחיר לפני ביצוע. אין הפתעות בחשבונית. מחירון פתוח לכל שירות.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ SERVICES ░░ -->
+<section id="services" class="services-bg">
+  <div class="section-header fade-in">
+    <div class="section-label">השירותים שלנו</div>
+    <h2>כל מה שצריך — <em>מאבחון ועד שיקום</em></h2>
+    <p class="section-sub">הסלגנו את השירותים ל-3 שלבים ברורים, כדי שתבינו בדיוק מה תקבלו בכל שלב.</p>
+  </div>
+  <div class="service-groups">
+
+    <div class="fade-in">
+      <div class="service-group-label group-diagnose">
+        <div class="group-icon">🔍</div>
+        <div>
+          <h3>אבחון</h3>
+          <span>מוצאים את שורש הבעיה לפני שנוגעים</span>
+        </div>
+      </div>
+      <div class="service-cards">
+        <div class="service-card">
+          <div class="s-icon">📷</div>
+          <h4>צילום קווי ביוב</h4>
+          <p>מצלמה רובוטית מוכנסת לצינור — תמונה ב-HD של בדיוק מה קורה בפנים.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-icon">🌡️</div>
+          <h4>איתור נזילות תרמי</h4>
+          <p>מצלמה תרמית מאתרת לחות מסתתרת בקירות וברצפות — ללא פגיעה במבנה.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-in">
+      <div class="service-group-label group-treat">
+        <div class="group-icon">🔧</div>
+        <div>
+          <h3>טיפול</h3>
+          <span>פותרים את הבעיה — מהיר ויסודי</span>
+        </div>
+      </div>
+      <div class="service-cards">
+        <div class="service-card">
+          <div class="s-icon">💦</div>
+          <h4>פתיחת סתימות בלחץ גבוה</h4>
+          <p>סילון מים בלחץ גבוה — פותר סתימות עקשניות בבטחה לצנרת.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-icon">🌿</div>
+          <h4>כרסום שורשים</h4>
+          <p>כרסום מכני של שורשי עצים שחדרו לצנרת — ללא פגיעה בדפנות.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-icon">🚛</div>
+          <h4>שאיבת ביובות</h4>
+          <p>שאיבה מקצועית עם ציוד וואקום מתקדם — מהיר ונקי.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-in">
+      <div class="service-group-label group-rehab">
+        <div class="group-icon">🏗️</div>
+        <div>
+          <h3>שיקום</h3>
+          <span>פתרון לטווח ארוך — בלי להרוס</span>
+        </div>
+      </div>
+      <div class="service-cards">
+        <div class="service-card">
+          <div class="s-icon">🔩</div>
+          <h4>תיקון צנרת מבפנים (NO DIG)</h4>
+          <p>שיטת השרוול וציפוי בהתזה — מחזקים צינורות שבורים ללא חפירה.</p>
+        </div>
+        <div class="service-card">
+          <div class="s-icon">🧹</div>
+          <h4>שטיפת קווי ביוב</h4>
+          <p>ניקוי יסודי של שומנים, משקעים וחלודה — תחזוקה מונעת לשנים קדימה.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ░░ HOW IT WORKS ░░ -->
+<section id="how">
+  <div class="section-header fade-in">
+    <div class="section-label">איך זה עובד</div>
+    <h2>5 צעדים — <em>משיחת טלפון לשקט נפשי</em></h2>
+    <p class="section-sub">התהליך שלנו פשוט, שקוף ומוכח. כך נראית עבודה שמכבדת את הלקוח.</p>
+  </div>
+  <div class="steps fade-in">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>יוצרים קשר</h3>
+        <p>מתקשרים, שולחים וואטסאפ או ממלאים טופס. מתארים את הבעיה — בלי טכניות.</p>
+        <span class="step-time">⚡ מענה תוך דקות</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>מגיעים ומאבחנים</h3>
+        <p>הצוות מגיע עם מצלמות ועם הציוד המלא — אבחון חזותי מדויק לפני כל עבודה.</p>
+        <span class="step-time">🕑 תוך שעתיים באזור המרכז</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>הצעת מחיר שקופה</h3>
+        <p>מסבירים מה מצאנו, מה צריך לעשות, ובכמה. ללא הפתעות ובלי לחץ.</p>
+        <span class="step-time">📋 לפני שנוגעים בדבר</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>ביצוע מקצועי</h3>
+        <p>פותרים את הבעיה בטכנולוגיה המתקדמת — נקי, מהיר, ובלי לפגוע במבנה.</p>
+        <span class="step-time">✅ מצולם לפני ואחרי</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>אחריות והמלצות</h3>
+        <p>מקבלים אחריות בכתב + הנחיות תחזוקה למניעת חזרת הבעיה.</p>
+        <span class="step-time">🔒 שקט נפשי לטווח ארוך</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ COMPARISON ░░ -->
+<section id="compare" class="compare-bg">
+  <div class="section-header fade-in">
+    <div class="section-label">למה לבחור בנו</div>
+    <h2>MD-Tech מול <em>הפתרון הרגיל</em></h2>
+  </div>
+  <div class="compare-grid fade-in">
+    <div class="compare-col good">
+      <h3>✅ MD-Tech</h3>
+      <div class="compare-item"><span class="ci">✅</span><span>אבחון מדויק עם מצלמות לפני כל עבודה</span></div>
+      <div class="compare-item"><span class="ci">✅</span><span>פתרונות ללא הרס — NO DIG</span></div>
+      <div class="compare-item"><span class="ci">✅</span><span>אחריות מלאה בכתב</span></div>
+      <div class="compare-item"><span class="ci">✅</span><span>ציוד מתקדם — תרמי, סיב אופטי, לחץ גבוה</span></div>
+      <div class="compare-item"><span class="ci">✅</span><span>שקיפות מחירים — הצעה לפני ביצוע</span></div>
+      <div class="compare-item"><span class="ci">✅</span><span>מגיעים מוכנים לכל סוג בעיה</span></div>
+    </div>
+    <div class="compare-col bad">
+      <h3>❌ אינסטלטור ממוצע</h3>
+      <div class="compare-item"><span class="ci">❌</span><span>ניחושים בלי אבחון מקדים</span></div>
+      <div class="compare-item"><span class="ci">❌</span><span>פתרון ראשוני = שבירת ריצוף וקירות</span></div>
+      <div class="compare-item"><span class="ci">❌</span><span>אחריות מוגבלת או אפסית</span></div>
+      <div class="compare-item"><span class="ci">❌</span><span>ציוד בסיסי בלבד</span></div>
+      <div class="compare-item"><span class="ci">❌</span><span>מחיר "מפתיע" בסוף העבודה</span></div>
+      <div class="compare-item"><span class="ci">❌</span><span>חוזר לאותה בעיה שוב</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ TESTIMONIALS ░░ -->
+<section id="testimonials">
+  <div class="section-header fade-in">
+    <div class="section-label">לקוחות מספרים</div>
+    <h2>מה אומרים <em>עלינו</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">היתה לנו סתימה איומה וחשבנו שנצטרך לחפור את כל החצר. הצוות פתר הכל תוך שעתיים עם המצלמה, בלי לפגוע בכלום. פשוט מקצועיים!</p>
+      <div class="testi-author">
+        <div class="testi-avatar">ר</div>
+        <div>
+          <div class="testi-name">רונית מ.</div>
+          <div class="testi-location">רמת גן</div>
+          <div class="testi-date">יולי 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">חשבנו שהבעיה שורשים — אחרי הצילום התברר שמשהו אחר לגמרי. חסכו לנו אלפי שקלים בעבודות מיותרות. מאוד מקצועיים ויסודיים.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">מ</div>
+        <div>
+          <div class="testi-name">משה כ.</div>
+          <div class="testi-location">פתח תקווה</div>
+          <div class="testi-date">יוני 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card fade-in">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">ועד הבית שלנו עובד איתם שנים. תמיד מגיעים מהר, מסבירים מה עושים ועוזבים נקי. ממליצים בחום.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">ד</div>
+        <div>
+          <div class="testi-name">דינה א.</div>
+          <div class="testi-location">תל אביב</div>
+          <div class="testi-date">מאי 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ EMERGENCY CTA ░░ -->
+<section class="emergency-cta">
+  <div class="section-label">שירות חירום</div>
+  <h2>סתימה? נזילה? <em>אנחנו כאן עכשיו</em></h2>
+  <p>מענה מיידי · הגעה תוך שעתיים במרכז · 24/7 כולל שבתות וחגים</p>
+  <div class="emergency-actions">
+    <a href="tel:050-444-4878" class="btn-primary">📞 050-444-4878</a>
+    <a href="https://api.whatsapp.com/send?phone=972504444878" class="btn-wa">💬 שלח וואטסאפ</a>
+  </div>
+</section>
+
+<!-- ░░ GALLERY ░░ -->
+<section id="gallery" class="gallery-bg">
+  <div class="section-header fade-in">
+    <div class="section-label">גלריית עבודות</div>
+    <h2>מהשטח — <em>עבודות אחרונות</em></h2>
+    <p class="section-sub">לפני ואחרי, ציוד בפעולה ותוצאות אמיתיות מהשטח.</p>
+  </div>
+  <div class="gallery-grid fade-in">
+    <!-- Replace with real <img> tags -->
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+    <div class="gallery-item"><div class="gallery-placeholder"><span>📷</span><span>הכנס תמונה</span></div></div>
+  </div>
+</section>
+
+<!-- ░░ FAQ ░░ -->
+<section id="faq">
+  <div class="section-header fade-in">
+    <div class="section-label">שאלות נפוצות</div>
+    <h2>תשובות לשאלות <em>הכי נפוצות</em></h2>
+  </div>
+  <div class="faq-list fade-in">
+
+    <div class="faq-item">
+      <button class="faq-q">כמה עולה האבחון/צילום? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>עלות האבחון תלויה בסוג הבדיקה ובמורכבות. אנחנו מספקים מחיר מפורט לפני כל עבודה — ללא הפתעות. צרו קשר לקבלת הצעה מותאמת.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">כמה זמן לוקח לפתוח סתימה? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>ברוב המקרים — בין 30 דקות לשעתיים, תלוי בסוג הסתימה ובמיקומה. לאחר האבחון נדע לתת הערכה מדויקת.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">איך אתם יודעים שהבעיה נפתרה? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>מצלמים לפני ואחרי — תראו בדיוק מה השתנה. אין צורך להאמין לנו על סמך מילה, יש לכם תיעוד ויזואלי.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">מה קורה אם הבעיה חוזרת? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>יש לנו אחריות מלאה — אם אותה בעיה חוזרת, אנחנו חוזרים חינם. ללא ויכוחים.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">אתם עובדים גם עם ועדי בתים? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>כן, אנחנו עובדים עם ועדי בתים ורבי מתחמים. מציעים חוזי תחזוקה שוטפים ותיעוד מלא לרישומי הבניין.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">אתם זמינים בשבת ובחגים? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>כן. לשירות חירום אנחנו זמינים 24/7 כולל שבתות וחגים. שיחת חירום תמיד מקבלת מענה.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">אילו אזורים אתם מכסים? <span class="faq-arrow">▼</span></button>
+      <div class="faq-a"><p>פעילים בכל אזור המרכז: תל אביב, רמת גן, גבעתיים, פתח תקווה, ראשון לציון, חולון, בת ים, רחובות, נס ציונה, יבנה ועוד. מחוץ לאזור זה — צרו קשר ונבדוק.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ░░ CONTACT ░░ -->
+<section id="contact" class="contact-bg">
+  <div class="contact-layout">
+    <div class="contact-info fade-in">
+      <div class="section-label">צור קשר</div>
+      <h2>נשמח <em>לעזור</em></h2>
+      <p>מלאו את הטופס ונחזור אליכם בהקדם. לחירום — התקשרו ישירות.</p>
+      <div class="contact-channels">
+        <a href="tel:050-444-4878" class="contact-channel cc-phone">
+          <div class="cc-icon">📞</div>
+          <div>
+            <div class="cc-label">טלפון — 24/7</div>
+            <div class="cc-value">050-444-4878</div>
+          </div>
+        </a>
+        <a href="https://api.whatsapp.com/send?phone=972504444878" class="contact-channel cc-wa">
+          <div class="cc-icon">💬</div>
+          <div>
+            <div class="cc-label">וואטסאפ</div>
+            <div class="cc-value">מענה מהיר</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form fade-in">
+      <div class="form-title">שלחו לנו פנייה</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>שם מלא *</label>
+          <input type="text" placeholder="ישראל ישראלי" required>
+        </div>
+        <div class="form-group">
+          <label>טלפון *</label>
+          <input type="tel" placeholder="050-0000000" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>סוג הבעיה *</label>
+          <select required>
+            <option value="" disabled selected>בחר סוג בעיה</option>
+            <option>סתימה / ריח רע</option>
+            <option>נזילה / כתם לחות</option>
+            <option>בעיה בקו ביוב</option>
+            <option>שורשים בצנרת</option>
+            <option>תחזוקה מונעת</option>
+            <option>אחר</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>עיר / אזור *</label>
+          <input type="text" placeholder="תל אביב, רמת גן..." required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>תיאור קצר (לא חובה)</label>
+        <textarea placeholder="ספרו לנו בקצרה מה קורה — זה עוזר לנו להגיע מוכנים..."></textarea>
+      </div>
+      <div class="form-emergency">
+        <input type="checkbox" id="emergency">
+        <label for="emergency">🚨 שירות חירום — צריך מענה תוך שעתיים</label>
+      </div>
+      <button class="form-submit" type="button">שלח פנייה ←</button>
+      <p class="form-note">⏱ נחזור אליכם תוך שעה בשעות הפעילות · חירום — התקשרו ישירות</p>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FOOTER ░░ -->
+<footer>
+  <div class="footer-logo">MD<span>.</span>Tech</div>
+  <div class="footer-text">© 2025 MD-Tech · כל הזכויות שמורות</div>
+  <div class="footer-links">
+    <a href="#services">שירותים</a>
+    <a href="#faq">שאלות נפוצות</a>
+    <a href="#contact">צור קשר</a>
+  </div>
+</footer>
+
+<!-- WA float -->
+<a href="https://api.whatsapp.com/send?phone=972504444878" class="float-wa" title="וואטסאפ">💬</a>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Form submit
+  document.querySelector('.form-submit').addEventListener('click', () => {
+    const name  = document.querySelector('input[placeholder="ישראל ישראלי"]').value.trim();
+    const phone = document.querySelector('input[type=tel]').value.trim();
+    if (!name || !phone) { alert('נא למלא שם וטלפון'); return; }
+    alert('תודה! נחזור אליכם בהקדם 🙏');
+  });
+</script>
+</body>
+</html>
